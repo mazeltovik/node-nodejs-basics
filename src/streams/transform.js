@@ -1,4 +1,5 @@
 import { Transform } from 'node:stream'
+import { pipeline } from 'node:stream/promises';
 
 const transform = async () => {
     const reverseData = new Transform({
@@ -6,7 +7,13 @@ const transform = async () => {
             callback(null, [...chunk.toString()].reverse().join(''));
         },
     });
-    process.stdin.pipe(reverseData).pipe(process.stdout);
+    await pipeline(
+        process.stdin,
+        reverseData,
+        process.stdout
+    ).catch(()=>{
+        throw new Error('Transform operation failed');
+    });
 };
 
 await transform();
