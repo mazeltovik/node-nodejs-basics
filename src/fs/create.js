@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises';
+import { readdir,writeFile } from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
@@ -13,12 +13,11 @@ const create = async () => {
         if (files.includes('fresh.txt')) {
             throw new Error('FS operation failed');
         } else {
-            const writable = await createWriteStream(fileName).setDefaultEncoding('utf-8');
-            writable.write('I am fresh and young');
+            writeFile(fileName,'I am fresh and young',)
         }
 
     } catch (err) {
-        console.log(err);
+        throw new Error('FS operation failed');
     }
 };
 

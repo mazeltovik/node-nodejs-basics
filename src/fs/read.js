@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { open } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
@@ -11,11 +11,8 @@ const filePath = path.join(__dirname, 'files', 'fileToRead.txt');
 
 const read = async () => {
     try {
-        const fd = await open(filePath);
-        const readable = fd.createReadStream().setEncoding('utf-8');
-        readable.on('data', (chunk) => {
-            process.stdout.write(chunk);
-        });
+        const data = await readFile(filePath, 'utf-8');
+        process.stdout.write(data);
     } catch {
         throw new Error('FS operation failed');
     }

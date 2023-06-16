@@ -1,5 +1,4 @@
 import { readdir } from 'node:fs/promises';
-import { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 

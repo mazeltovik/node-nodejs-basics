@@ -1,5 +1,4 @@
-import { readdir } from 'node:fs/promises';
-import { createReadStream, createWriteStream } from 'node:fs';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { mkdir, stat, access } from 'node:fs/promises';
@@ -14,19 +13,25 @@ const copy = async () => {
     await access(filesInput).catch(() => {
         throw new Error('FS operation failed');
     })
-    await mkdir(filesOutput).catch(()=>{
+    await mkdir(filesOutput).catch(() => {
         throw new Error('FS operation failed');
     })
     const files = await readdir(filesInput);
-    files.forEach(file => {
+    while (files.length != 0) {
+        let file = files.shift();
         let filePathInput = path.join(__dirname, 'files', file);
-        let filePathOutput = path.join(__dirname, 'files_copy', file);
-        let readable = createReadStream(filePathInput, 'utf8');
-        readable.on('open', () => {
-            let writable = createWriteStream(filePathOutput).setDefaultEncoding('utf-8');
-            readable.pipe(writable);
-        })
-    })
+        if ((await stat(filePathInput)).isFile()) {
+            let filePathOutput = path.join(__dirname, 'files_copy', file);
+            let readableData = await readFile(filePathInput, 'utf-8');
+            await writeFile(filePathOutput, readableData);
+        } else {
+            let filesFolder = await readdir(filePathInput);
+            await mkdir(path.join(__dirname, 'files_copy', file));
+            filesFolder.forEach(v => {
+                files.push(`${file}\\${v}`)
+            })
+        }
+    }
 };
 
 await copy();
