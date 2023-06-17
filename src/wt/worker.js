@@ -8,3 +8,12 @@ const sendResult = () => {
 };
 
 sendResult();
+
+// Or
+// parentPort.once('message', (value) => {
+//     assert(value.hereIsYourPort instanceof MessagePort);
+//     value.hereIsYourPort.postMessage(
+//         nthFibonacci(value.nth)
+//     );
+//     value.hereIsYourPort.close();
+// });
