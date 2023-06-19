@@ -1,7 +1,7 @@
 import path from "node:path";
 import os from "node:os"
 import { fileURLToPath } from "url";
-import { Worker,MessageChannel,MessagePort,isMainThread,parentPort,} from "node:worker_threads";
+import {Worker} from "node:worker_threads";
 
 
 const __filename = fileURLToPath(import.meta.url);
